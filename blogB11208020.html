@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>當正義遇上紅豆麵包：麵包超人大百科</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#FF4D4D',
+                            yellow: '#FFD93D',
+                            dark: '#1A1A1A',
+                            accent: '#FF8E9E', // Sexy Pink-ish Red
+                            cream: '#FFF9F0'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Outfit', 'Noto Sans TC', 'sans-serif'],
+                        body: ['Noto Sans TC', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(255, 77, 77, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #FF4D4D 0%, #FF8E9E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #FF4D4D;
+            border-radius: 10px;
+        }
+
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        body {
+            background-color: #FFF9F0;
+            background-image: radial-gradient(#FFD93D 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+        }
+
+        .section-divider {
+            height: 4px;
+            width: 60px;
+            background: #FFD93D;
+            border-radius: 2px;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body class="font-body text-gray-800 leading-relaxed overflow-x-hidden">
+
+    <!-- Header / Banner Section -->
+    <header class="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-12">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-yellow rounded-full blur-[120px] opacity-30"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-red rounded-full blur-[120px] opacity-20"></div>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10 flex flex-col items-center">
+            <!-- Banner Image Rendering -->
+            <div class="w-full max-w-5xl rounded-[2.5rem] overflow-hidden shadow-2xl shadow-brand-red/20 border-4 border-white animate-float">
+                <img src='https://opal.google/board/blobs/e6ae8a47-8758-47ed-9f66-86efe81abf71' alt='Anpanman Sexy-Cute Reimagined Banner' class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700" />
+            </div>
+
+            <div class="mt-12 text-center max-w-3xl">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-brand-red text-white font-bold text-sm mb-4 tracking-widest uppercase">Special Encyclopedia</span>
+                <h1 class="text-4xl md:text-6xl font-display font-extrabold mb-6 leading-tight">
+                    當正義遇上紅豆麵包：<br/>
+                    <span class="gradient-text">你所不知道的「麵包超人」大百科！</span>
+                </h1>
+                <p class="text-lg text-gray-600 font-medium">學號：B11208020 • 探索經典角色的性感與可愛轉生</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-16 max-w-5xl">
+        
+        <!-- Foreword / Introduction Section -->
+        <section class="mb-20">
+            <div class="glass-card p-8 md:p-12 rounded-[2rem] relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/></svg>
+                </div>
+                <h2 class="text-3xl font-display font-extrabold mb-6 flex items-center gap-3">
+                    <span class="text-4xl">💡</span> 前言：誰的童年沒有這張圓滾滾的臉？
+                </h2>
+                <div class="section-divider"></div>
+                <p class="text-lg md:text-xl text-gray-700 leading-loose">
+                    走進任何一間幼兒園，只要拿出那張圓滾滾、紅通通的臉龐，原本喧鬧的孩子們往往會瞬間安靜，露出著迷的眼神。麵包超人（Anpanman）在東亞地區幾乎是「幼兒界天王」的代名詞。然而，如果你以為這只是一部單純給小孩看的「打怪救美」卡通，那就太小看這顆紅豆麵包了。這部作品的背後，其實隱藏著作者柳瀨嵩（やなせたかし）最深情、也最滄桑的「大叔浪漫」。
+                </p>
+            </div>
+        </section>
+
+        <!-- Bento Grid for Features -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-20">
+            
+            <!-- Item 1: The Origin -->
+            <div class="md:col-span-7 glass-card p-8 rounded-[2rem] hover-lift">
+                <h3 class="text-2xl font-bold mb-4 text-brand-red">靈魂的誕生：生命之星</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    麵包超人的誕生充滿了科幻與神話色彩。他並非自然生長，而是當「果醬叔叔」正在烤製紅豆麵包時，一顆神祕的「生命之星」墜入爐火中，賦予了麵包靈魂。這也奠定了他的生命本質：他是為了幫助他人而存在的奇蹟。
+                </p>
+            </div>
+
+            <!-- Item 2: Team -->
+            <div class="md:col-span-5 bg-brand-yellow/20 p-8 rounded-[2rem] border-2 border-brand-yellow/30 hover-lift">
+                <h3 class="text-2xl font-bold mb-4">夢幻團隊大點名</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <span class="text-brand-red font-bold">●</span>
+                        <span><strong>果醬叔叔：</strong> 最強後勤中樞，研發交通工具與「新臉」。</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-brand-red font-bold">●</span>
+                        <span><strong>帥氣組合：</strong> 吐司超人的優雅與咖哩超人的熱血。</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Item 3: Baikinman Analysis -->
+            <div class="md:col-span-5 bg-brand-dark text-white p-8 rounded-[2rem] hover-lift">
+                <h3 class="text-2xl font-bold mb-4 text-brand-yellow">細菌人：真的邪惡嗎？</h3>
+                <p class="text-gray-300">
+                    從社會學角度看，細菌人代表「菌」，麵包超人代表「發酵」。兩者在自然界中是共生共存的關係。細菌人的搗蛋更像是種「調皮的共生」，展現了萬物皆有其位。
+                </p>
+            </div>
+
+            <!-- Item 4: Ultimate Sacrifice -->
+            <div class="md:col-span-7 border-4 border-dashed border-brand-red/20 p-8 rounded-[2rem] flex flex-col justify-center hover-lift bg-white/50">
+                <h3 class="text-2xl font-bold mb-4 italic">最強必殺技：拿自己的臉請你吃！</h3>
+                <p class="text-gray-700 text-lg">
+                    麵包超人最令人震撼的技能不是「麵包超人拳」，而是當他看到飢餓的人時，會毫不猶豫地說：「餓了嗎？我的臉分你一半。」這種將身體的一部分奉獻出去的行為，才是他超越所有超級英雄的核心。
+                </p>
+            </div>
+        </div>
+
+        <!-- Black History Section -->
+        <section class="mb-20 space-y-8">
+            <h2 class="text-4xl font-display font-black text-center mb-12">
+                <span class="bg-brand-red text-white px-6 py-2 rounded-xl transform -rotate-2 inline-block">二、 驚人大反轉！</span>
+                <span class="block mt-4 text-brand-dark">麵包超人的「黑歷史」與誕生奇聞</span>
+            </h2>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-6 rounded-3xl hover-lift">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-2xl">👴</div>
+                    <h4 class="font-bold text-xl mb-2">破爛斗篷大叔</h4>
+                    <p class="text-sm text-gray-600">1969年原型，他只是一個在戰亂中到處送麵包、最後因被誤認被擊落的普通人類大叔。</p>
+                </div>
+                <div class="glass-card p-6 rounded-3xl hover-lift">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-2xl">🥘</div>
+                    <h4 class="font-bold text-xl mb-2">餓肚子哲學</h4>
+                    <p class="text-sm text-gray-600">柳瀨嵩在二戰體驗過極度飢餓，他認為「消除飢餓」是世界上唯一不變的絕對正義。</p>
+                </div>
+                <div class="glass-card p-6 rounded-3xl hover-lift">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-2xl">🚫</div>
+                    <h4 class="font-bold text-xl mb-2">當年差點被封殺</h4>
+                    <p class="text-sm text-gray-600">1973年繪本版被評為「殘忍且不合邏輯」，沒人看好卻意外成為孩子們心中的奇蹟。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Child Psychology Section -->
+        <section class="mb-20 bg-brand-accent/5 rounded-[3rem] p-10 md:p-16 border border-brand-accent/20">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl font-display font-extrabold mb-10 text-center">三、 為什麼小孩會「集體中邪」？</h2>
+                <div class="space-y-12">
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <div class="text-6xl font-black text-brand-accent opacity-30">01</div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-2">「麵包超人期」是真的！</h4>
+                            <p class="text-gray-600">紅、黃配色與圓圈臉部對嬰兒視覺極具吸引力，堪稱「止哭神器」。</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <div class="text-6xl font-black text-brand-accent opacity-30">02</div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-2">挫折教育的最強範本</h4>
+                            <p class="text-gray-600">被打扁、淋雨，只要「換顆頭」又是條好漢！帶給孩子極大的心理安全感。</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <div class="text-6xl font-black text-brand-accent opacity-30">03</div>
+                        <div>
+                            <h4 class="font-bold text-xl mb-2">善良的感染力</h4>
+                            <p class="text-gray-600">分享不只是美德，更是改變他人生命的力量。這種同理心是長盛不衰的社會基礎。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controversies & Future Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            <!-- Data / Controversies -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-display font-extrabold text-brand-red uppercase tracking-tight"># 網民腦補與爭議</h3>
+                <div class="space-y-4">
+                    <div class="p-5 bg-white rounded-2xl shadow-sm border border-gray-100">
+                        <h5 class="font-bold mb-1">拳頭能解決問題嗎？</h5>
+                        <p class="text-sm text-gray-500">2019年日本社交媒體爭論，擔心暴力解決方式影響幼教觀念。</p>
+                    </div>
+                    <div class="p-5 bg-white rounded-2xl shadow-sm border border-gray-100">
+                        <h5 class="font-bold mb-1">歐美的「恐怖片」視角</h5>
+                        <p class="text-sm text-gray-500">部分歐美家長將「食用自己的臉」標籤為殘忍的邪典情節。</p>
+                    </div>
+                    <div class="p-5 bg-white rounded-2xl shadow-sm border border-gray-100">
+                        <h5 class="font-bold mb-1">黑暗勞工傳聞</h5>
+                        <p class="text-sm text-gray-500">24小時待命的工廠被調侃為成人的「血汗勞工」寫照。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Future Trends -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-display font-extrabold text-brand-dark uppercase tracking-tight"># 未來趨勢：再戰百年</h3>
+                <div class="p-8 bg-brand-yellow rounded-3xl h-full relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <ul class="space-y-6 text-brand-dark">
+                            <li class="border-b border-brand-dark/10 pb-4">
+                                <span class="block font-black text-xl">全球佈局</span>
+                                <span class="text-sm opacity-80">克服文化隔閡，推動代際消費價值。</span>
+                            </li>
+                            <li class="border-b border-brand-dark/10 pb-4">
+                                <span class="block font-black text-xl">數位轉型</span>
+                                <span class="text-sm opacity-80">博物館、手遊、互動教材多元化體驗。</span>
+                            </li>
+                            <li>
+                                <span class="block font-black text-xl">2025 晨間劇《紅豆麵包》</span>
+                                <span class="text-sm opacity-80">NHK致敬柳瀨嵩夫婦，找回人性光輝的感動。</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <section class="text-center mb-20 bg-brand-dark text-white rounded-[4rem] py-20 px-8 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+            <div class="relative z-10 max-w-2xl mx-auto">
+                <h2 class="text-4xl font-display font-black mb-6">🌟 結語</h2>
+                <p class="text-xl text-brand-yellow mb-8 font-medium">
+                    「真正的英雄，不是永遠不敗，而是即使變弱了、變醜了，只要能讓身邊的人不再挨餓，他就是最帥的存在。」
+                </p>
+                <p class="text-gray-400 mb-12">
+                    這種「自我犧牲」的溫柔，或許正是這個喧囂世界最需要的良藥。
+                </p>
+
+                <!-- Interactive Question -->
+                <div class="bg-white/10 p-8 rounded-3xl border border-white/20">
+                    <p class="font-bold text-lg mb-6">互動小問答：如果可以選，你最想吃哪位超人的臉？（誤）</p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button class="px-6 py-3 rounded-full bg-brand-red text-white font-bold hover:scale-110 transition-transform">紅豆</button>
+                        <button class="px-6 py-3 rounded-full bg-brand-yellow text-brand-dark font-bold hover:scale-110 transition-transform">咖哩</button>
+                        <button class="px-6 py-3 rounded-full bg-brand-cream text-brand-dark font-bold hover:scale-110 transition-transform">吐司</button>
+                    </div>
+                    <p class="mt-6 text-sm text-gray-500 italic">歡迎在下方留言分享你的童年記憶！</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating UI Element -->
+    <div class="fixed bottom-8 right-8 z-50 animate-pulse-slow">
+        <div class="w-16 h-16 bg-brand-red rounded-full flex items-center justify-center text-white shadow-xl cursor-pointer hover:rotate-12 transition-transform">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+        </div>
+    </div>
+
+</body>
+</html>
