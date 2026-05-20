@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM - 牛排知識網</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 自訂滾動條樣式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .chat-bubble {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 確保細節選單的平滑過渡 */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans h-screen flex flex-col overflow-hidden">
+
+    <!-- Navbar -->
+    <header class="bg-white shadow-sm z-10 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <h1 class="text-xl font-bold text-slate-800 hidden sm:block">牛排特搜 <span class="text-sm font-normal text-slate-500">專屬知識庫</span></h1>
+            </div>
+            
+            <div class="flex-1 max-w-lg mx-4">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="搜尋資源庫內容..." class="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-full leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 sm:text-sm transition-colors duration-200">
+                </div>
+            </div>
+
+            <div class="flex items-center">
+                <a href="#" onclick="alert('即將前往牛排專屬商城！')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    周邊商城
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col md:flex-row gap-6 overflow-hidden">
+        
+        <!-- Left Panel: Content Tabs -->
+        <div class="flex-1 flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-200 bg-slate-50/50 px-2 pt-2">
+                <button onclick="switchTab('library')" id="tab-library" class="px-6 py-3 text-sm font-medium text-orange-600 border-b-2 border-orange-500 hover:bg-slate-50 transition-colors rounded-t-lg">資源庫</button>
+                <button onclick="switchTab('faq')" id="tab-faq" class="px-6 py-3 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-700 hover:bg-slate-50 transition-colors rounded-t-lg">常見問題 (FAQ)</button>
+                <button onclick="switchTab('notes')" id="tab-notes" class="px-6 py-3 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-700 hover:bg-slate-50 transition-colors rounded-t-lg">我的筆記</button>
+            </div>
+
+            <!-- Tab Content: Library -->
+            <div id="content-library" class="flex-1 overflow-y-auto p-6">
+                <h2 class="text-xl font-bold mb-4 text-slate-800">影片資源庫</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4" id="resourceGrid">
+                    <!-- Resource Cards -->
+                    <div class="resource-card border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow bg-white">
+                        <div class="flex items-start justify-between">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 mb-2">極限生存</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1">不帶一毛錢，蘭嶼極限生存48小時！</h3>
+                        <p class="text-sm text-slate-500 line-clamp-2">首次挑戰離島！身無分文的極限生存，感受當地人滿滿的熱情與尋找打工機會的過程。</p>
+                    </div>
+                    
+                    <div class="resource-card border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow bg-white">
+                        <div class="flex items-start justify-between">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-2">頂級美食</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1">吃爆東港黑鮪魚季，一口要價200元!!</h3>
+                        <p class="text-sm text-slate-500 line-clamp-2">帶金條去東港換黑鮪魚！入口即化的金三角部位，體驗油脂在舌尖融化的極致美味。</p>
+                    </div>
+
+                    <div class="resource-card border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow bg-white">
+                        <div class="flex items-start justify-between">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mb-2">廚藝教學</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1">四道最常做的氣炸料理，0失敗！</h3>
+                        <p class="text-sm text-slate-500 line-clamp-2">料理白痴都會做！好市多氣炸松阪豬、韓式辣醬五花肉等，輕鬆做出餐廳等級美味。</p>
+                    </div>
+
+                    <div class="resource-card border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow bg-white">
+                        <div class="flex items-start justify-between">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mb-2">家庭生活</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1">送老婆此生最棒生日禮物！越式奢華洗頭！</h3>
+                        <p class="text-sm text-slate-500 line-clamp-2">寵妻無極限，丟包小孩一整天，讓老婆享受專屬的放假時光，員工還獨自挑戰帶娃！</p>
+                    </div>
+
+                    <div class="resource-card border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow bg-white">
+                        <div class="flex items-start justify-between">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mb-2">搞笑開箱</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1">花10萬塊買3D列印機，老婆氣炸!?</h3>
+                        <p class="text-sm text-slate-500 line-clamp-2">男人的夢想！買了昂貴的3D列印機印寶可夢和玩具給小孩，聲稱以後不用買名牌包了。</p>
+                    </div>
+
+                    <div class="resource-card border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow bg-white">
+                        <div class="flex items-start justify-between">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800 mb-2">感情經營</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1">【牛妮聊天室】8年長跑怎麽維持感情</h3>
+                        <p class="text-sm text-slate-500 line-clamp-2">牛排與妮妮分享八年感情維持秘訣，探討婚前婚後差異、暈船經驗以及如何互相包容。</p>
+                    </div>
+                </div>
+                <div id="noResult" class="hidden text-center text-slate-500 mt-10 py-10">找不到符合搜尋條件的影片內容。</div>
+            </div>
+
+            <!-- Tab Content: FAQ -->
+            <div id="content-faq" class="flex-1 overflow-y-auto p-6 hidden">
+                <h2 class="text-xl font-bold mb-6 text-slate-800">知識庫常見問題</h2>
+                <div class="space-y-4">
+                    <details class="group border border-slate-200 rounded-xl bg-white [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex cursor-pointer items-center justify-between gap-1.5 p-4 text-slate-900 font-medium hover:bg-slate-50 rounded-xl transition-colors">
+                            牛排喜歡吃牛肉嗎？
+                            <svg class="h-5 w-5 shrink-0 transition duration-300 group-open:-rotate-180 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </summary>
+                        <div class="px-4 pb-4 text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                            其實他不吃牛喔！在《國寶綿羊豬好吃嗎？》的影片中，他親口提到：「雖然我叫牛排呢，其實我不吃牛...我是高屏豬肉將軍」。
+                        </div>
+                    </details>
+
+                    <details class="group border border-slate-200 rounded-xl bg-white [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex cursor-pointer items-center justify-between gap-1.5 p-4 text-slate-900 font-medium hover:bg-slate-50 rounded-xl transition-colors">
+                            牛排有養寵物嗎？叫什麼名字？
+                            <svg class="h-5 w-5 shrink-0 transition duration-300 group-open:-rotate-180 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </summary>
+                        <div class="px-4 pb-4 text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                            有的，他有養貓。在氣炸鍋料理等影片中常會看到貓咪出沒，其中一隻脾氣很好、腸胃好的叫「一毛」，另一隻跑很快、較膽小且腸胃較差的叫「閃電」。
+                        </div>
+                    </details>
+
+                    <details class="group border border-slate-200 rounded-xl bg-white [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex cursor-pointer items-center justify-between gap-1.5 p-4 text-slate-900 font-medium hover:bg-slate-50 rounded-xl transition-colors">
+                            關於以前的團體「狠愛演」為什麼解散？
+                            <svg class="h-5 w-5 shrink-0 transition duration-300 group-open:-rotate-180 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </summary>
+                        <div class="px-4 pb-4 text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                            牛排曾在影片中正式說明，主要是因為「每個人都有自己的選擇的方向與節奏」，他尊重彼此想要安靜處理的方式。解散後他也有試圖邀約胡椒、蛇丸拍片，但因彼此太忙等因素未果。目前他將重心放在家人身上。
+                        </div>
+                    </details>
+
+                    <details class="group border border-slate-200 rounded-xl bg-white [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex cursor-pointer items-center justify-between gap-1.5 p-4 text-slate-900 font-medium hover:bg-slate-50 rounded-xl transition-colors">
+                            牛排的老婆和小孩是誰？
+                            <svg class="h-5 w-5 shrink-0 transition duration-300 group-open:-rotate-180 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </summary>
+                        <div class="px-4 pb-4 text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                            牛排的老婆叫「妮妮」，他們愛情長跑8年以上。影片中常稱呼大兒子為「牛小排」或「小排」。牛排非常疼愛家人，常策劃寵妻與寵孩企劃。
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Tab Content: Notes -->
+            <div id="content-notes" class="flex-1 flex flex-col p-6 hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-slate-800">我的研究筆記</h2>
+                    <button onclick="saveNotes()" class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-700 transition-colors">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                        儲存筆記
+                    </button>
+                </div>
+                <div class="flex-1 relative">
+                    <textarea id="notesArea" class="w-full h-full resize-none rounded-xl border border-slate-200 p-4 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-slate-50/50 text-slate-700 leading-relaxed" placeholder="在這裡記下您從知識庫中整理出的重點... (系統會自動儲存於您的瀏覽器中)"></textarea>
+                    <div id="saveToast" class="absolute bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none">
+                        筆記已儲存！
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: NotebookLM Chat interface -->
+        <div class="w-full md:w-96 lg:w-[400px] flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden shrink-0">
+            <!-- Chat Header -->
+            <div class="bg-slate-800 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-tr from-orange-400 to-orange-600 rounded-full p-1.5">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-white font-semibold text-sm">NotebookLM 智能助理</h2>
+                        <p class="text-slate-400 text-xs">基於「牛排」頻道逐字稿</p>
+                    </div>
+                </div>
+                <button onclick="clearChat()" title="清空對話" class="text-slate-400 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+            </div>
+
+            <!-- Chat Messages Area -->
+            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
+                <!-- Initial Greeting -->
+                <div class="flex gap-3">
+                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center shrink-0 border border-orange-200">
+                        <span class="text-orange-600 font-bold text-xs">AI</span>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm max-w-[85%]">
+                        <p class="text-sm text-slate-700">哈囉！我是基於您提供的「牛排」YouTube逐字稿所建立的智能助理。您可以問我關於極限生存、高級美食開箱、氣炸鍋料理，或是他與老婆妮妮、寵物們的家庭趣事！</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="p-3 bg-white border-t border-slate-200">
+                <form id="chatForm" class="flex items-end gap-2">
+                    <textarea id="chatInput" rows="1" class="flex-1 resize-none border border-slate-300 rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-slate-50" placeholder="詢問關於文件內容的問題..."></textarea>
+                    <button type="submit" class="bg-slate-800 text-white p-2.5 rounded-full hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 transition-colors shrink-0 disabled:opacity-50" id="sendBtn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // === Tab Switching Logic ===
+        function switchTab(tabId) {
+            const tabs = ['library', 'faq', 'notes'];
+            tabs.forEach(id => {
+                const btn = document.getElementById(`tab-${id}`);
+                const content = document.getElementById(`content-${id}`);
+                
+                if (id === tabId) {
+                    btn.classList.remove('text-slate-500', 'border-transparent');
+                    btn.classList.add('text-orange-600', 'border-orange-500');
+                    content.classList.remove('hidden');
+                } else {
+                    btn.classList.add('text-slate-500', 'border-transparent');
+                    btn.classList.remove('text-orange-600', 'border-orange-500');
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        // === Search Logic for Library ===
+        const searchInput = document.getElementById('searchInput');
+        const resourceCards = document.querySelectorAll('.resource-card');
+        const noResult = document.getElementById('noResult');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            let visibleCount = 0;
+            
+            // Auto switch to library tab when searching
+            if(term.length > 0) switchTab('library');
+
+            resourceCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(term)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            noResult.style.display = visibleCount === 0 ? 'block' : 'none';
+        });
+
+        // === Notes LocalStorage Logic ===
+        const notesArea = document.getElementById('notesArea');
+        const saveToast = document.getElementById('saveToast');
+
+        // Load existing notes
+        if(localStorage.getItem('notebooklm_steak_notes')) {
+            notesArea.value = localStorage.getItem('notebooklm_steak_notes');
+        }
+
+        function saveNotes() {
+            localStorage.setItem('notebooklm_steak_notes', notesArea.value);
+            saveToast.classList.remove('opacity-0');
+            setTimeout(() => {
+                saveToast.classList.add('opacity-0');
+            }, 2000);
+        }
+
+        // Auto-save on typing (debounced)
+        let timeoutId;
+        notesArea.addEventListener('input', () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(saveNotes, 1000);
+        });
+
+        // === NotebookLM Chat Logic ===
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+        const sendBtn = document.getElementById('sendBtn');
+
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight <= 120 ? this.scrollHeight : 120) + 'px';
+        });
+
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        function clearChat() {
+            if(confirm('確定要清空對話紀錄嗎？')) {
+                // Keep only the first greeting message
+                while(chatMessages.children.length > 1) {
+                    chatMessages.removeChild(chatMessages.lastChild);
+                }
+            }
+        }
+
+        function appendUserMessage(text) {
+            const html = `
+                <div class="flex gap-3 justify-end chat-bubble">
+                    <div class="bg-slate-800 text-white rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
+                        <p class="text-sm break-words">${text.replace(/\n/g, '<br>')}</p>
+                    </div>
+                </div>
+            `;
+            chatMessages.insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
+        }
+
+        function appendAIMessage(text) {
+            const html = `
+                <div class="flex gap-3 chat-bubble">
+                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center shrink-0 border border-orange-200">
+                        <span class="text-orange-600 font-bold text-xs">AI</span>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm max-w-[85%]">
+                        <p class="text-sm text-slate-700 leading-relaxed">${text}</p>
+                    </div>
+                </div>
+            `;
+            chatMessages.insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Mock AI knowledge base response generator based on uploaded transcripts
+        function generateAIResponse(query) {
+            const q = query.toLowerCase();
+            
+            if (q.includes('生存') || q.includes('極限') || q.includes('蘭嶼') || q.includes('屏東')) {
+                return "根據資料庫，牛排曾挑戰過多次「48小時極限生存」。例如在蘭嶼時，他不帶一毛錢，深刻體驗了當地人的熱情，還想辦法打工；而在屏東極限生存時，因為是他最熟悉的家鄉，他還開玩笑說這對他太簡單了，甚至還當上了老師呢！";
+            }
+            if (q.includes('氣炸') || q.includes('料理') || q.includes('食譜')) {
+                return "牛排非常喜歡做「氣炸鍋料理」！在他的影片中，他推薦過好市多的松阪豬、韓式辣醬五花肉等「0失敗」的懶人食譜，甚至還挑戰過做出夜市等級的美味氣炸料理，非常適合料理新手嘗試。";
+            }
+            if (q.includes('老婆') || q.includes('妮妮') || q.includes('結婚') || q.includes('感情')) {
+                return "牛排的老婆是「妮妮」，他們愛情長跑長達8年。頻道中有很多寵妻企劃，像是送她去越式奢華洗頭、花3萬6千塊住泰國天堂島度假，或是讓老婆當一天女僕等搞笑互動。在「牛妮聊天室」中，他們也分享了維繫感情的秘訣，強調溝通與互相體諒。";
+            }
+            if (q.includes('解散') || q.includes('狠愛演')) {
+                return "關於「狠愛演」解散，牛排曾拍片正式澄清。主要原因是團隊成員各自有想發展的方向與節奏。解散後他曾嘗試邀約前團員合作，但因為大家都忙而未能成行。他表示尊重大家的決定，目前頻道重心會放在陪伴家人與個人企劃上。";
+            }
+            if (q.includes('海鮮') || q.includes('鮪魚') || q.includes('壽司') || q.includes('吃到飽')) {
+                return "牛排頻道超常拍攝奢華海鮮開箱！他曾帶金條去東港吃一口200元的黑鮪魚金三角、挑戰不看金額海鮮吃到飽、吃爆3萬5千塊的高級壽司（150貫），甚至還買過全長100公分的巨無霸烏賊和7000塊的巨無霸七彩龍蝦！";
+            }
+            if (q.includes('貓') || q.includes('寵物') || q.includes('一毛') || q.includes('閃電')) {
+                return "牛排有養貓喔！逐字稿中常提到他家的貓咪，像是腸胃很好、愛搶鏡頭的「一毛」，還有一隻曾經受過傷、跑得很快又膽小的「閃電」。他也曾拍攝過0元打造貓帳篷的手作企劃給貓咪玩。";
+            }
+            if (q.includes('牛排不吃') || (q.includes('牛排') && q.includes('牛肉'))) {
+                 return "這是一個很有趣的冷知識：雖然YouTuber的名字叫「牛排」，但他曾在評測國寶綿羊豬的影片中親口證實他「其實不吃牛肉」，還開玩笑自封為「高屏豬肉將軍」！";
+            }
+            if (q.includes('小孩') || q.includes('牛小排') || q.includes('兒子')) {
+                return "牛排很常為了小孩（常被稱為牛小排）策劃影片。像是花10萬買3D列印機印寶可夢玩具給他、第一次帶小孩出國搭飛機手忙腳亂，或是手做巨大的寶可夢棉花糖球來寵溺孩子。";
+            }
+            if (q.includes('泰國') || q.includes('曼谷') || q.includes('出國')) {
+                return "牛排的泰國旅遊影片非常豐富！他體驗過曼谷的貴族服飾、去猛男海鮮餐廳朝聖，還去了普吉島體驗一晚3萬6千塊的天堂島度假村，旅遊企劃總是充滿驚喜與奢華感。";
+            }
+
+            // Default fallback
+            return "針對您的問題，在我目前的知識庫（牛排的YouTube逐字稿）中沒有找到完全匹配的內容喔。您可以試著問我關於：<br>1. 牛排的極限生存挑戰<br>2. 誇張的頂級海鮮與美食開箱<br>3. 氣炸鍋懶人料理<br>4. 他與老婆妮妮、寵物貓咪的家庭趣事！";
+        }
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if(!text) return;
+
+            // Disable input while processing
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
+
+            // Append User msg
+            appendUserMessage(text);
+
+            // Simulate AI thinking delay
+            setTimeout(() => {
+                const response = generateAIResponse(text);
+                appendAIMessage(response);
+                
+                // Re-enable input
+                chatInput.disabled = false;
+                sendBtn.disabled = false;
+                chatInput.focus();
+            }, 800 + Math.random() * 700); // Random delay between 0.8s - 1.5s
+        });
+    </script>
+</body>
+</html>
